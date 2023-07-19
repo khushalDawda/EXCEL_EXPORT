@@ -1,0 +1,200 @@
+﻿@model IEnumerable<ViewModels.Models.CbillModel>
+<br />
+
+@{
+    int srno = 0;
+}
+<div class="row" style="padding-top:80px;padding-left:200px">
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="file" id="fileupload" name="files" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="button" name="Upload" value="Upload" id="btnupload" class="btn btn-primary" />
+        </div>
+    </div>
+    <div class="col-md-5">
+        <input type="submit" name="Export" value="Save Data" id="btnExport" class="btn btn-primary" disabled />
+    </div>
+</div>
+<div class="clearfix">&nbsp;</div>
+<div class="row">
+    <div id="divPrint"></div>
+
+</div>
+
+<br />
+
+<div class="container p-4 border">
+    <div class="row pb-2">
+        <div class="col">
+            <h1 class="text-primary">Cbill List</h1>
+        </div>
+    </div>
+
+    <table id="CbillDatatable1" class="table table-striped dt-responsive wrap" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>
+                    Account No
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    PAN NO
+                </th>
+                <th>
+                    AADHAR NO
+                </th>
+                <th>
+                    ELECTION NO
+                </th>
+                <th>
+                    SOCIETY NAME
+                </th>
+                <th>
+                    BRANCH NAME
+                </th>
+                <th>
+                    MOBILE NO
+                </th>
+                <th>
+                    GL NAME
+                </th>
+                <th>
+                    Balance
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>@item.CbillId</td>
+                    <td>@item.AccountName</td>
+                    <td>@item.PancardNo</td>
+                    <td>@item.AadharCardNo</td>
+                    <td>@item.ElectionCardNo</td>
+                    <td>@item.SocietyName</td>
+                    <td>@item.BranchName</td>
+                    <td>@item.MobileNo</td>
+                    <td>@item.GLNAME</td>
+                    <td class="w-25">@((item.Amount).ToString())</td>
+                    @*<td>
+                            <a asp-controller="Villa" asp-action="UpdateVilla" asp-route-villaId="@item.CbillId" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                            <a asp-controller="Villa" asp-action="DeleteVilla" asp-route-villaId="@item.CbillId" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+                        </td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+    var Exceldata;
+    $(function () {
+        $('#btnupload').on('click', function () {
+            var fileExtension = ['xls', 'xlsx'];
+            var filename = $('#fileupload').val();
+            if (filename.length == 0) {
+                alert("Please select a file.");
+                return false;
+            }
+            else {
+                var extension = filename.replace(/^.*\./, '');
+                if ($.inArray(extension, fileExtension) == -1) {
+                    alert("Please select only excel files.");
+                    return false;
+                }
+            }
+            var fdata = new FormData();
+            var fileUpload = $("#fileupload").get(0);
+            var files = fileUpload.files;
+            fdata.append(files[0].name, files[0]);
+            $.ajax({
+                type: "POST",
+                url: "/Cbill/Import",
+                beforeSend: function (xhr) {
+                    $('#cover-spin').show(0);
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: fdata,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    $('#cover-spin').hide();
+                    if (response.statusCode != 200)
+                        alert('Some error occured while uploading');
+                    else if (response.statusCode == 200) {
+                        $('#btnExport').removeAttr('disabled');
+                        Exceldata = response.result;
+                        $('#divPrint').html(response.errorMessages[0]);
+                    }
+                    else {
+                        $('#btnExport').removeAttr('disabled');
+                        $('#divPrint').html(response.errorMessages[0]);
+                    }
+                },
+                error: function (e) {
+                    $('#divPrint').html(e.responseText);
+                }
+            });
+        })
+        $('#btnExport').on('click', function () {
+            var fileExtension = ['xls', 'xlsx'];
+            var filename = $('#fileupload').val();
+
+            var fdata = new FormData();
+
+
+            if (filename.length == 0) {
+                alert("Please select a file then Import");
+                return false;
+            }
+            else if (Exceldata != null && Exceldata != undefined) {
+                fdata.append("listOfAccounts", JSON.stringify(Exceldata));
+                $('#cover-spin').show(0);
+                $.ajax({
+                    type: "POST",
+                    async: true,
+                    url: "/Cbill/Create",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: fdata,
+                    success: function (response) {
+                        $('#cover-spin').hide();
+                        if (response.statusCode != 200)
+                            alert('Some error occured while uploading');
+                        else if (response.statusCode == 200) {
+                            alert("data save sucessfully");
+                            window.location.reload();
+                        }
+                        else {
+                            $('#btnExport').removeAttr('disabled');
+                            $('#divPrint').html(response.errorMessages[0]);
+                        }
+                    },
+                    error: function (e) {
+                        $('#cover-spin').hide();
+                        $('#divPrint').html(e.responseText);
+                    }
+                });
+            }
+        });
+    });
+
+</script>
+@section Scripts
+{
+    <script src="~/js/DatatableCbill.js"></script>
+}
+

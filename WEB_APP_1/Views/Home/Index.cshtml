@@ -1,0 +1,29 @@
+﻿@{
+
+    ViewData["Title"] = "Home Page";
+}
+@model WEB_APP.Models.UserData
+<!--<div class="text-center">
+    <h1 class="display-4 font-weight-bold">Welcome To <br />My Funds Gate</h1>-->
+@*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+<!--<div>
+
+    </div>
+</div>-->
+
+<div class="h-100 d-flex align-items-center justify-content-center" style="padding-top:100px;text-align:center">
+    <div>
+        <br />
+        @if (User.Identity.IsAuthenticated)
+        {
+            <p class="font-weight-bold text-a text-wrap" style="font-size: large">Hello, @User.Claims.ToList()[2].Value.ToString() </p>
+        }
+        <br />
+        <h1 class="display-4 font-weight-bold text-a">Welcome To <br />My Funds Gate</h1>
+        @if (Model != null && Model.soc_Name != null)
+        {
+            <br /> <p class="font-weight-bold text-a text-wrap" style="font-size: xx-large"> Society Name:- @Model.soc_Name </p>
+        }
+    </div>
+
+</div>
