@@ -47,6 +47,7 @@ namespace WEB_API
             services.AddScoped<ILoan, LoanDBService>();
             services.AddScoped<ICbill, CbillDBService>();
             services.AddScoped<IUserRepository, UserDBService>();
+            services.AddTransient<IMenuMaster, MenuMasterDBService>();
 
             var key = Configuration.GetValue<string>("ApiSettings:Secret");
 
