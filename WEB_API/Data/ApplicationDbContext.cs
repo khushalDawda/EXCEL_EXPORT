@@ -25,6 +25,9 @@ namespace WEB_API.Data
 
         public DbSet<Cbill> Cbills { get; set; }
 
+        public DbSet<MenuMaster> MenuMaster { get; set; }
+
+        public DbSet<UserWiseMenu> UserWiseMenu { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
