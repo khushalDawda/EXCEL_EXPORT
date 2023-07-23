@@ -6,7 +6,7 @@ using WEB_API.Models;
 
 namespace WEB_API.Repository.Interface
 {
-    interface IMenuMaster
+    public interface IMenuMaster : IRepository<MenuMaster>
     {
         IEnumerable<MenuMaster> GetMenuMaster();
         IEnumerable<MenuMaster> GetMenuMaster(String UserRole);

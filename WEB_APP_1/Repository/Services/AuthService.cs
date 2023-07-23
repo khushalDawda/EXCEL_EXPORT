@@ -70,6 +70,15 @@ namespace WEB_APP.Repository.Services
             });
         }
 
+        public Task<T> GetAllUsers<T>()
+        {
+            return SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.POST,
+                Url = villaUrl + "/api/UsersAuth/GetAllUser"
+            });
+        }
+
         public Task<T> GetMaxSocietyId<T>()
         {
             return SendAsync<T>(new APIRequest()

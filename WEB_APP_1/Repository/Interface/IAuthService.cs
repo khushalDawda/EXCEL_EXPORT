@@ -14,5 +14,6 @@ namespace WEB_APP.Repository.Interface
         Task<T> GetRoles<T>();
         Task<T> GetUserInfo<T>(string username);
         Task<T> GetMaxSocietyId<T>();
+        Task<T> GetAllUsers<T>();
     }
 }

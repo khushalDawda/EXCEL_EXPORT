@@ -17,6 +17,8 @@ namespace WEB_API.Mappings
             CreateMap<Cbill, CbillModel>().ReverseMap();
             CreateMap<Loan, LoanModel>().ReverseMap();
             CreateMap<ApplicationUser, UserModel>().ReverseMap();
+            CreateMap<MenuMaster, MenuMasterModel>().ReverseMap();
+            CreateMap<UserWiseMenu, UserWiseMenuModel>().ReverseMap();
 
         }
     }
