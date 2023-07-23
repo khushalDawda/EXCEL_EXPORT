@@ -49,11 +49,20 @@ namespace WEB_API.Repository.ServiceClass
             var user = _db.ApplicationUsers.FirstOrDefault(x => x.UserName == username);
             if (user != null)
             {
-                return user ;
+                return user;
             }
             return null;
         }
 
+        public async Task<List<ApplicationUser>> GetAllUser()
+        {
+            List<ApplicationUser> user = _db.ApplicationUsers.ToList();
+            if (user != null && user.Count > 0)
+            {
+                return user;
+            }
+            return null;
+        }
         public async Task<LoginResponseModel> Login(LoginRequestModel loginRequestDTO)
         {
             var user = _db.ApplicationUsers

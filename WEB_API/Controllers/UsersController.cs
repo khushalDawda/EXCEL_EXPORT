@@ -141,6 +141,26 @@ namespace WEB_API.Controllers
             }
         }
 
+        [HttpPost("GetAllUser")]
+        public async Task<IActionResult> GetAllUser()
+        {
+            var rolesList = _userRepo.GetAllUser();
+            if (rolesList != null)
+            {
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
+                _response.Result = rolesList;
+                return Ok(_response);
+            }
+            else
+            {
+                _response.StatusCode = HttpStatusCode.NotFound;
+                _response.IsSuccess = true;
+                return Ok(_response);
+            }
+
+        }
+
         [HttpPost("GetMaxSocietyId")]
         public async Task<IActionResult> GetMaxSocietyId()
         {

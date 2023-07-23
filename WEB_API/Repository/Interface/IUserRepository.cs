@@ -17,6 +17,7 @@ namespace WEB_API.Repository.Interface
         bool AnyUserPresent();
         List<string> GetRoles();
         string GetMaxSocietyId();
+        Task<List<ApplicationUser>> GetAllUser();
 
     }
 

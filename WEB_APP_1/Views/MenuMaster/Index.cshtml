@@ -1,0 +1,22 @@
+﻿@model ViewModels.Models.UserWiseMenuModel
+
+@{
+    int srno = 0;
+}
+<br />
+<div class="container p-4 border">
+    <div class="row pb-2">
+        <div class="col">
+            <h1 class="text-primary">Select the user</h1>
+            <div class="row">
+                <div class="col-md-4">
+                    <select id="drpUserList" class="form-control" asp-for="UserName" asp-items="@(new SelectList(Model.userModelsList,"value","text"))">
+                        <option value="">---SELECT---</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row"></div>
+        </div>
+    </div>
+</div>
