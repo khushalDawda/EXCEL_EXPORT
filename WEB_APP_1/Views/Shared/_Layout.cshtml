@@ -47,19 +47,11 @@
                             if (User.Claims.ToList()[1].Value == "MasterAdmin")
                             {
                                 <li class="nav-item">
-                                    <ul class="navbar-nav flex-grow-1">
-                                        <li class="nav-item">
-                                            <a class="nav-link text-white" asp-area="" asp-controller="" asp-action="">Assign Menus</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-white" asp-area="" asp-controller="MenuMaster" asp-action="AddMenuForRole">Role Menu</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-white" asp-area="" asp-controller="MenuMaster" asp-action="Index">User Menu</a>
-                                        </li>
-                                    </ul>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="MenuMaster" asp-action="AddMenuForRole">Role Menu</a>
                                 </li>
-                               
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="MenuMaster" asp-action="Index">User Menu</a>
+                                </li>
                             }
 
                         }

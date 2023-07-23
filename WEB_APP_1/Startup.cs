@@ -56,6 +56,9 @@ namespace WEB_APP_1
             services.AddHttpClient<ICbillService, CbillService>();
             services.AddScoped<ICbillService, CbillService>();
 
+            services.AddHttpClient<IMenuMasterService, MenuMasterService>();
+            services.AddScoped<IMenuMasterService, MenuMasterService>();
+
             services.AddDistributedMemoryCache();
             services.AddAuthentication
     (options =>
