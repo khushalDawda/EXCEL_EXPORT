@@ -82,5 +82,51 @@ namespace WEB_API.Controllers
             return _response;
 
         }
+
+        [HttpGet]
+        // [Authorize(Roles = "admin")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<ViewModels.Models.APIResponse>> GetMenuFromRole([FromBody] string rolename)
+        {
+            try
+            {
+                string Role = null;
+                string UserName = null;
+                var TokenValidations = WEB_API.Helpers.Helpers.TokenValidation(HttpContext.Request.Headers["Bearer"]);
+                if (TokenValidations.Key != null && TokenValidations.Value == true)
+                {
+                    var list = TokenValidations.Key.Split("|");
+                    Role = list[0];
+                    UserName = list[1];
+                }
+                else if (TokenValidations.Value == false)
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages
+                         = new List<string>() { "Session Expire" };
+                    return _response;
+                }
+
+                var menuRecords = await _menuMasterDbService.GetAllAsync(u => u.User_Roll == rolename);
+                if (menuRecords == null && menuRecords.Count > 0)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    return NotFound(_response);
+
+                }
+                _response.Result = _mapper.Map<MenuMasterModel>(menuRecords);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages
+                     = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
     }
 }
