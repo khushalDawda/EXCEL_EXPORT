@@ -62,6 +62,28 @@ namespace WEB_APP.Repository.Services
             });
         }
 
+        public Task<T> GetMenuFromRole<T>(string roleName, string token)
+        {
+            return SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = AccountUrl + "/api/MenuMaster",
+                Data = roleName,
+                Token = token
+            });
+        }
+
+        public Task<T> GetMenusFromRoleAnduser<T>(string rolename, string username, string token)
+        {
+            return SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = AccountUrl + "/api/MenuMaster/",
+                Data = "rolename:" + rolename + "username:" + username,
+                Token = token
+            });
+        }
+
         public Task<T> UpdateAsync<T>(MenuMasterModel dto, string token)
         {
             return SendAsync<T>(new APIRequest()
@@ -72,7 +94,9 @@ namespace WEB_APP.Repository.Services
                 Token = token
             });
         }
-        
-       
+
+
+
+
     }
 }

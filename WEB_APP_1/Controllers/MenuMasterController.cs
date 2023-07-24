@@ -76,5 +76,16 @@ namespace WEB_APP.Controllers
             }
             return View(menuMasterModel);
         }
+
+        public async Task<IActionResult> GetMenuForRole(string roleName)
+        {
+            APIResponse response = await _menuMasterService.GetMenuFromRole<APIResponse>(roleName, HttpContext.User.Claims.LastOrDefault().Value);
+            if (response != null && response.IsSuccess)
+            {
+
+            }
+            return null;
+
+        }
     }
 }
