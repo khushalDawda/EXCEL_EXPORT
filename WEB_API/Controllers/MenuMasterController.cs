@@ -83,7 +83,7 @@ namespace WEB_API.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("{rolename}")]
         // [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
