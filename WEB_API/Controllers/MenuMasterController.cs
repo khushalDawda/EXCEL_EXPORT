@@ -83,7 +83,7 @@ namespace WEB_API.Controllers
 
         }
 
-        [HttpGet("{rolename}")]
+        [HttpPost]
         // [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -110,10 +110,10 @@ namespace WEB_API.Controllers
                 }
 
                 var menuRecords = await _menuMasterDbService.GetAllAsync(u => u.User_Roll == rolename);
-                if (menuRecords == null && menuRecords.Count > 0)
+                if (menuRecords != null && menuRecords.Count == 0)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
-                    return NotFound(_response);
+                    return Ok(_response);
 
                 }
                 _response.Result = _mapper.Map<MenuMasterModel>(menuRecords);

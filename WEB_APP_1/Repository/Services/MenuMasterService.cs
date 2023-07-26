@@ -66,7 +66,7 @@ namespace WEB_APP.Repository.Services
         {
             return SendAsync<T>(new APIRequest()
             {
-                ApiType = SD.ApiType.GET,
+                ApiType = SD.ApiType.POST,
                 Url = AccountUrl + "/api/MenuMaster",
                 Data = roleName,
                 Token = token
