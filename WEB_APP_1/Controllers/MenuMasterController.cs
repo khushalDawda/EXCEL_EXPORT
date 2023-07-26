@@ -77,15 +77,42 @@ namespace WEB_APP.Controllers
             return View(menuMasterModel);
         }
 
-        public async Task<IActionResult> GetMenuForRole(string roleName)
+        public async Task<APIResponse> GetMenuForRole(string roleName)
         {
-            APIResponse response = await _menuMasterService.GetMenuFromRole<APIResponse>(roleName, HttpContext.User.Claims.LastOrDefault().Value);
+            var response = await _menuMasterService.GetMenuFromRole<APIResponse>(roleName, HttpContext.User.Claims.LastOrDefault().Value);
             if (response != null && response.IsSuccess)
+            {
+                if(response.StatusCode==HttpStatusCode.NotFound)
+                {
+
+                }
+
+            }
+            else if (response != null && response.StatusCode == HttpStatusCode.NotFound)
             {
 
             }
-            return null;
 
+            return response;
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddMenuForRole(MenuMasterModel obj)
+        {
+            //APIResponse result = await _authService.RegisterAsync<APIResponse>(obj);
+            //if (result != null && result.IsSuccess)
+            //{
+            //    TempData["success"] = "Register Sucessfully";
+            //    return RedirectToAction("Register");
+            //}
+            //else
+            //{
+            //    ModelState.AddModelError("CustomError", result.ErrorMessages.FirstOrDefault());
+            //    TempData["error"] = result.ErrorMessages.FirstOrDefault();
+            //}
+            return View();
         }
     }
 }

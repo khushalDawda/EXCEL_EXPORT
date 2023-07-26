@@ -20,69 +20,56 @@
             <div class="row">
                 <div class="col-6">
                     <div class="form-v5-content">
-                        <h5>@strAddUpdate Menu for Role </h5>
-                        <div class="form-row">
-                            <label for="MenuName">Menu Name</label>
-                            <input asp-for="MenuName" type="text" class="form-control" placeholder="Menu Name" />
-                        </div>
-                        <br />
-                        <div class="form-row">
-                            <label for="Parent_MenuID">Parent MenuID</label>
-                            <input asp-for="Parent_MenuID" type="text" class="form-control" placeholder="Parent Menu Name" />
-                        </div>
-                        <br />
-                        <div class="form-row">
-                            <label for="Parent_MenuID">Menu FileName</label>
-                            <input asp-for="MenuFileName" type="text" class="form-control" placeholder="MenuFileName" />
-                        </div>
-                        <br />
-                        <div class="form-row">
-                            <label for="MenuURL">Menu URL</label>
-                            <input asp-for="MenuURL" type="text" class="form-control" placeholder="MenuURL" />
-                        </div>
-                        <br />
-                        <div class="form-row">
-                            <label for="USE_YN">Active</label>
-                            <input asp-for="USE_YN" name="rdoYes" type="radio" value="Yes" style="margin-left:10px;margin-top:-3px" /> <label for="rdoYes" style="padding-top:3">Yes</label>
-                            <input asp-for="USE_YN" name="rdoNo" type="radio" value="No" style="margin-left: 10px; margin-top: -3px" /> <label for="rdoNo" style="padding-top: 3">No</label>
-                        </div>
-                        <br />
-                        <div class="form-row-last">
-                            <button type="submit" class="form-control btn-success" value="Submit">@strAddUpdate</button>
-                        </div>
+                        <form class="form-detail" method="post">
+                            <h5>@strAddUpdate Menu for Role </h5>
+
+                            <div class="form-row">
+                                <label for="MenuID">Menu Short Name (Menu Id)</label>
+                                <input asp-for="MenuID" type="text" class="form-control" placeholder="Menu Id" />
+                            </div>
+
+                            <div class="form-row">
+                                <label for="MenuName">Menu Name</label>
+                                <input asp-for="MenuName" type="text" class="form-control" placeholder="Menu Name" />
+                            </div>
+                            <br />
+                            <div class="form-row">
+                                <label for="Parent_MenuID">Parent MenuID</label>
+                                <input asp-for="Parent_MenuID" id=" " type="text" class="form-control" placeholder="Parent Menu Name" />
+                            </div>
+                            <br />
+
+                            <div class="form-row">
+                                <label for="User_Roll">User Roll</label>
+                                <input asp-for="User_Roll" type="text" class="form-control" placeholder="User Role" />
+                            </div>
+                            <br />
+                            <div class="form-row">
+                                <label for="Parent_MenuID">Menu FileName</label>
+                                <input asp-for="MenuFileName" type="text" class="form-control" placeholder="MenuFileName" />
+                            </div>
+                            <br />
+                            <div class="form-row">
+                                <label for="MenuURL">Menu URL</label>
+                                <input asp-for="MenuURL" type="text" class="form-control" placeholder="MenuURL" />
+                            </div>
+                            <br />
+                            <div class="form-row">
+                                <label for="USE_YN">Active</label>
+                                <input asp-for="USE_YN" name="rdoYes" type="radio" value="Yes" style="margin-left:10px;margin-top:-3px" /> <label for="rdoYes" style="padding-top:3">Yes</label>
+                                <input asp-for="USE_YN" name="rdoNo" type="radio" value="No" style="margin-left: 10px; margin-top: -3px" /> <label for="rdoNo" style="padding-top: 3">No</label>
+                            </div>
+                            <br />
+                            <div class="form-row-last">
+                                <button type="submit" class="form-control btn-success" value="Submit">@strAddUpdate</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <div class="col-6">
-                    <table class="table table-striped dt-responsive wrap" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Sr.No
-                                </th>
-                                <th>
-                                    Menu Name
-                                </th>
-                                <th>
-                                    Parent Menu
-                                </th>
-                                <th>
-                                    Menu File Name
-                                </th>
-                                <th>
-                                    Menu Url
-                                </th>
-                                <th>
-                                    Active
-                                </th>
-                                <th>
-                                    Actions
-                                </th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    <div id="divPrint" class="container">
+                        <h4>Please select the Role</h4>
+                    </div>
                 </div>
             </div>
 
@@ -91,10 +78,14 @@
 
     </div>
 </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
     $(function () {
         $('#ddlRole').change(function () {
+            $('#txtUserRole').html($('#ddlRole').val());
             $.ajax({
                 type: "GET",
                 url: "/MenuMaster/GetMenuForRole?roleName=" + $('#ddlRole').val(),
@@ -105,10 +96,11 @@
                 processData: false,
                 success: function (response) {
                     $('#cover-spin').hide();
-                    if (response.statusCode != 200)
+                    if (response.statusCode != 200 && response.statusCode != 404)
                         alert('Some error occured while uploading');
+                    else if (response.statusCode == 404)
+                        $('#divPrint').html('<h4>No Menu assign yet to this Role</h4>');
                     else if (response.statusCode == 200) {
-                        $('#btnExport').removeAttr('disabled');
                         Exceldata = response.result;
                         $('#divPrint').html(response.errorMessages[0]);
                     }
