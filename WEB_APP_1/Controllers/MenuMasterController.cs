@@ -82,8 +82,13 @@ namespace WEB_APP.Controllers
             var response = await _menuMasterService.GetMenuFromRole<APIResponse>(roleName, HttpContext.User.Claims.LastOrDefault().Value);
             if (response != null && response.IsSuccess)
             {
-                if(response.StatusCode==HttpStatusCode.NotFound)
+                if (response.StatusCode == HttpStatusCode.NotFound)
                 {
+
+                }
+                else if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    response.Result = JsonConvert.DeserializeObject<List<MenuMasterModel>>(Convert.ToString(response.Result));
 
                 }
 
@@ -97,21 +102,41 @@ namespace WEB_APP.Controllers
 
         }
 
+        
+        public ActionResult MenuList(string menuMasterModels)
+        {
+            return PartialView(JsonConvert.DeserializeObject<List<MenuMasterModel>>(menuMasterModels));
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddMenuForRole(MenuMasterModel obj)
         {
-            //APIResponse result = await _authService.RegisterAsync<APIResponse>(obj);
-            //if (result != null && result.IsSuccess)
-            //{
-            //    TempData["success"] = "Register Sucessfully";
-            //    return RedirectToAction("Register");
-            //}
-            //else
-            //{
-            //    ModelState.AddModelError("CustomError", result.ErrorMessages.FirstOrDefault());
-            //    TempData["error"] = result.ErrorMessages.FirstOrDefault();
-            //}
+            if (obj != null)
+            {
+                if(obj.MenuIdentity==0)
+                {
+                    //create code
+                    obj.CreatedDate = DateTime.Now;
+                    APIResponse result = await _menuMasterService.CreateAsync<APIResponse>(obj, HttpContext.User.Claims.LastOrDefault().Value);
+                    if (result != null && result.IsSuccess)
+                    {
+                        TempData["success"] = "Menu Added Sucessfully";
+                        return RedirectToAction("AddMenuForRole");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("CustomError", result.ErrorMessages.FirstOrDefault());
+                        TempData["error"] = result.ErrorMessages.FirstOrDefault();
+                        return View(obj);
+                    }
+                }
+                else
+                {
+
+                }
+              
+            }
             return View();
         }
     }
