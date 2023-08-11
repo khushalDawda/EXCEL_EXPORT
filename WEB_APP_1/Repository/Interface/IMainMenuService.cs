@@ -14,7 +14,7 @@ namespace WEB_APP.Repository.Interface
         Task<T> UpdateAsync<T>(MenuMasterModel dto, string token);
         Task<T> DeleteAsync<T>(int id, string token);
         Task<T> GetMenusFromRoleAnduser<T>(string rolename, string username, string token);
-        Task<T> GetMenuFromRole<T>(string roleName, string token);
+        Task<T> GetMenuFromRole<T>(string roleName, string token);       
 
     }
 }

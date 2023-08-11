@@ -92,6 +92,7 @@ namespace WEB_API.Controllers
         {
             try
             {
+
                 string Role = null;
                 string UserName = null;
                 var TokenValidations = WEB_API.Helpers.Helpers.TokenValidation(HttpContext.Request.Headers["Bearer"]);

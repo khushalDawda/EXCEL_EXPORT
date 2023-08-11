@@ -1,21 +1,13 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using ViewModels.Models;
 using WEB_APP.Repository.Interface;
@@ -58,6 +50,12 @@ namespace WEB_APP.Controllers
 
         public async Task<IActionResult> AddMenuForRole()
         {
+
+            APIResponse menuForRole = await _menuMasterService.GetMenuFromRole<APIResponse>(HttpContext.User.Claims.ToList()[1].Value.ToString(), HttpContext.User.Claims.ToList()[3].Value.ToString());
+            if (menuForRole != null && menuForRole.IsSuccess)
+            {
+                TempData["RolesMenus"] = JsonConvert.DeserializeObject<List<MenuMasterModel>>(Convert.ToString(menuForRole.Result));
+            }
 
             MenuMasterModel menuMasterModel = new MenuMasterModel();
             APIResponse result = await _authService.GetRoles<APIResponse>();
